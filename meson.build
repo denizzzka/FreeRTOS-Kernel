@@ -50,11 +50,7 @@ if cc_name == 'gcc' or cc_name == 'clang'
 endif
 
 #TODO: detach picolibc from FreeRTOS
-__picolibc_dep = dependency(
-  'picolibc',
-  fallback: ['picolibc', 'picolibc_dep'],
-  default_options: ['multilib=false']
-)
+__picolibc_dep = subproject('picolibc', default_options: ['multilib=false']).get_variable('picolibc_dep')
 
 picolibc_compile_args = [
     '--no-standard-libraries',
@@ -62,7 +58,6 @@ picolibc_compile_args = [
     '-Wno-empty-body', #warning: while loop has empty body
     '-Wno-unused-private-field', #private field '_lock' is not used
     '-D_WANT_IO_C99_FORMATS',
-    #'-D___int64_t_defined',
 ]
 
 picolibc_dep = declare_dependency(

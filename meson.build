@@ -53,7 +53,6 @@ endif
 __picolibc_dep = subproject('picolibc', default_options: ['multilib=false']).get_variable('picolibc_dep')
 
 picolibc_compile_args = [
-    '--no-standard-libraries',
     '-Wno-unknown-pragmas', #pragma diagnostic disabled
     '-Wno-empty-body', #warning: while loop has empty body
     '-Wno-unused-private-field', #private field '_lock' is not used

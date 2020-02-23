@@ -50,11 +50,34 @@ if cc_name == 'gcc' or cc_name == 'clang'
 endif
 
 #TODO: detach picolibc from FreeRTOS
-picolibc_sub = subproject('picolibc', default_options: ['multilib=false'])
-picolibc_dep = picolibc_sub.get_variable('picolibc_dep')
+__picolibc_dep = dependency(
+  'picolibc',
+  fallback: ['picolibc', 'picolibc_dep'],
+  default_options: [
+    'multilib=false',
+#    'newlib-io-c99-formats=true',
+#    'newlib-io-long-long=true',
+#    'newlib-io-long-double=true',
+#    'newlib-io-float=true',
+  ]
+)
+
+picolibc_compile_args = [
+    '--no-standard-libraries',
+    '-Wno-unknown-pragmas', #pragma diagnostic disabled
+    '-Wno-empty-body', #warning: while loop has empty body
+    '-Wno-unused-private-field', #private field '_lock' is not used
+    '-D_WANT_IO_C99_FORMATS',
+    #'-D___int64_t_defined',
+]
+
+picolibc_dep = declare_dependency(
+    dependencies: [__picolibc_dep],
+    compile_args: picolibc_compile_args,
+)
 
 freertos_dep = declare_dependency(
     include_directories: [includes, CPU_specific_includes],
     sources: [sources, CPU_specific, heap_memory_management],
-    dependencies: [picolibc_dep]
+    dependencies: [picolibc_dep],
 )

@@ -53,13 +53,7 @@ endif
 __picolibc_dep = dependency(
   'picolibc',
   fallback: ['picolibc', 'picolibc_dep'],
-  default_options: [
-    'multilib=false',
-#    'newlib-io-c99-formats=true',
-#    'newlib-io-long-long=true',
-#    'newlib-io-long-double=true',
-#    'newlib-io-float=true',
-  ]
+  default_options: ['multilib=false']
 )
 
 picolibc_compile_args = [
